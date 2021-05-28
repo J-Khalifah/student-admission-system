@@ -1,4 +1,6 @@
 const controller = require('../controller/grade.controller');
+const authJwt = require('../middleware/authjwt.middleware');
+const verifySignUp = require('../middleware/verifysignup.middleware');
 
 module.exports = function(app){
     app.use(function(req, res, next){
@@ -9,14 +11,36 @@ module.exports = function(app){
         next();
     });
 
-    app.post("/api/grade/create", controller.createGrade);
+    app.post("/api/grade/create",[
+    authJwt.verifyToken,
+    authJwt.isAdmin,
+    verifySignUp.checkDuplicateNameOrDescription
+    ], 
+    controller.createGrade);
 
-    app.post("/api/grade/update", controller.updateGrade);
+    app.post("/api/grade/update",[
+    authJwt.verifyToken,
+    authJwt.isAdmin,
+    verifySignUp.checkUpdateDuplicateNameOrDescription
+    ], 
+    controller.updateGrade);
 
-    app.get("/api/grade/get/:grade/:limit", controller.ReadGrade);
+    app.get("/api/grade/get/:grade/:limit",[
+    authJwt.verifyToken,
+    authJwt.isUserOrAdmin
+    ],
+    controller.ReadGrade);
 
-    app.get("/api/grade/delete/:id", controller.deleteGrade);
+    app.get("/api/grade/delete/:id",[
+    authJwt.verifyToken,
+    authJwt.isAdmin
+    ], 
+    controller.deleteGrade);
     
-    app.get("/api/grade/read/:grade/:limit/:grade", controller.ReadGradeByName)
+    app.get("/api/grade/read/:name",[
+    authJwt.verifyToken,
+    authJwt.isUserOrAdmin
+    ], 
+    controller.ReadGradeByName)
 
 }

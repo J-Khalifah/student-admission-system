@@ -6,7 +6,10 @@ const Olevel = db.o_level;
 
 exports.createOlevel = (req, res) => {
     Olevel.create({
-        description: req.body.description
+        description: req.body.description,
+        userId: req.body.userId,
+        gradeId: req.body.gradeId,
+        subjectId: req.body.subjectId
     }).then(o_level => {
         res.status(200).send({
             success: true,

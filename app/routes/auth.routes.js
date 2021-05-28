@@ -1,4 +1,7 @@
 const controller = require('../controller/auth.controller');
+const authJwt = require('../middleware/authjwt.middleware');
+const verifySignUp = require('../middleware/verifysignup.middleware');
+
 
 module.exports = function(app){
     app.use(function(req,res,next){
@@ -9,12 +12,30 @@ module.exports = function(app){
         next();
     });
 
-    app.post('/api/auth/sign-up-admin', controller.signUpAdmin);
+    app.post('/api/auth/signup-admin',
+    [
+    // authJwt.verifyToken, 
+    // authJwt.isAdmin, 
+    // verifySignUp.checkRolesExisted
+    // verifySignUp.checkUpdateDuplicateUsernameOrEmail
+    ],
+    controller.signUpAdmin);
 
-    app.post('/api/auth/signUpUser', controller.signUpUser);
+    app.post('/api/auth/signup-user',
+    [
+    verifySignUp.checkDuplicateUsernameOrEmail, 
+    verifySignUp.checkRolesExisted,
+    // verifySignUp.checkUpdateDuplicateUsernameOrEmail
+    ], 
+    controller.signUpUser);
 
-    app.post('/api/auth/signin', controller.signin);
+    app.post('/api/auth/signin',
+    [/*[authJwt.isUserOrAdmin],*/], 
+    controller.signin);
 
-    app.post('/api/auth/UpdatePassword', controller.UpdatePassword);
-
+    app.post('/api/auth/UpdatePassword',
+    [
+    authJwt.verifyToken
+    ],
+    controller.UpdatePassword);
 }

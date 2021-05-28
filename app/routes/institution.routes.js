@@ -1,4 +1,6 @@
 const controller = require('../controller/institution.controller');
+const authJwt = require('../middleware/authjwt.middleware');
+const verifySignUp = require('../middleware/verifysignup.middleware');
 
 module.exports = function(app){
     app.use(function(req, res, next){
@@ -9,12 +11,35 @@ module.exports = function(app){
         next();
     });
 
-    app.post("/api/institution/create", controller.createInstitution);
+    app.post("/api/institution/create",[
+    authJwt.verifyToken,
+    authJwt.isAdmin,
+    verifySignUp.checkDuplicateInstitutionName
+    ], 
+    controller.createInstitution);
 
-    app.post("/api/institution/update", controller.updateInstitution);
+    app.post("/api/institution/update",[
+    authJwt.verifyToken,
+    authJwt.isAdmin,
+    verifySignUp.checkUpdateDuplicateInstitutionName
+    ], 
+    controller.updateInstitution);
 
-    app.get("/api/institution/get/:institution/:limit", controller.ReadInstitution);
+    app.get("/api/institution/get/:institution/:limit",[
+    authJwt.verifyToken,
+    authJwt.isUserOrAdmin,
+    ],
+    controller.ReadInstitution);
 
-    app.get("/api/institution/delete/:id", controller.deleteInstitution);
+    app.get("/api/institution/read/:name",[
+    authJwt.verifyToken,
+    authJwt.isUserOrAdmin
+    ],
+    controller.ReadInstitution);
 
+    app.get("/api/institution/delete/:id",[
+    authJwt.verifyToken,
+    authJwt.isUserOrAdmin
+    ], 
+    controller.deleteInstitution);
 }

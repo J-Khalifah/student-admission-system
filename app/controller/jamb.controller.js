@@ -7,7 +7,10 @@ const Jamb = db.jamb;
 exports.createJamb = (req, res) => {
     Jamb.create({
         score: req.body.score,
-        description: req.body.description
+        description: req.body.description,
+        subjectId: req.body.subjectId,
+        gradeId: req.body.gradeId,
+        userId: req.body.userId
     }).then(jamb => {
         res.status(200).send({
             success: true,

@@ -1,13 +1,13 @@
 {
   "name": "blog",
   "version": "1.0.0",
-  "description": "a simple nodejs blog ",
-  "main": "blog.js",
+  "description": "a simple nodejs university portal ",
+  "main": "student.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon blog.js"
   },
-  "author": "yusuf olatayo",
+  "author": "Jimoh Abdulqadir Khalifah",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",

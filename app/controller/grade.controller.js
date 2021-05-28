@@ -39,13 +39,13 @@ exports.ReadGrade = (req, res) => {
 //read grade by gradeName
 
 exports.ReadGradeByName = (req, res) => {
-    let offset = parseInt(req.params.grade) * parseInt(req.params.limit)
+    // let offset = parseInt(req.params.grade) * parseInt(req.params.limit)
     Grade.findAndCountAll({
-        limit: parseInt(req.params.limit),
-        offset: offset,
-        order: [
-           [ 'createdAt', 'updatedAt']
-        ],
+        // limit: parseInt(req.params.limit),
+        // offset: offset,
+        // order: [
+        //    [ 'createdAt', 'updatedAt']
+        // ],
         where: {
             name: req.params.name
         }

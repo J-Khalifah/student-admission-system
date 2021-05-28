@@ -22,7 +22,7 @@ const Role = db.role;
 db.sequelize.sync();
 // db.sequelize.sync({force: true}).then(() =>{
 //     console.log('Drop and Resync Database with {force: true}');
-//     iniial();
+//     initial();
 // });
 
 require('./app/routes/auth.routes')(app)
@@ -31,6 +31,7 @@ require('./app/routes/grade.routes')(app)
 require('./app/routes/jamb.routes')(app)
 require('./app/routes/institution.routes')(app)
 require('./app/routes/o-level.routes')(app)
+require('./app/routes/user.routes')(app)
 
 const PORT = process.env.PORT || 5700;
 

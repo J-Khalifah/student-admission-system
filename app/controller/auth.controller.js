@@ -7,6 +7,7 @@ const Op = db.Sequelize.Op;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { role } = require("../model");
 
 var salt = bcrypt.genSaltSync(8);
 
@@ -27,22 +28,22 @@ exports.signUpAdmin = (req, res) => {
         const token = jwt.sign({id: user.id}, config.secret,{expiresIn: 86400 /*24 hours*/ })
             user.setRoles(role).then(() => {
                 res.status(200).send({
-                    success: true,
-                    id: user.id,
-                    firstname: user.firstname,
-                    middlename: user.middlename,
-                    lastname: user.lastname,
-                    email: user.email,
-                    userName: user.userName,
-                    password: user.password,
-                    phoneNumber: user.phoneNumber,
-                    image: user.image,
-                    nationality: user.nationality,
-                    state: user.state,
-                    dateOfBirth: user.dateOfBirth,
-                    accessToken: token,
-                    roles: role,
-                    message: 'admin registered successfully'
+                success: true,
+                id: user.id,
+                firstname: user.firstname,
+                middlename: user.middlename,
+                lastname: user.lastname,
+                email: user.email,
+                userName: user.userName,
+                password: user.password,
+                phoneNumber: user.phoneNumber,
+                image: user.image,
+                nationality: user.nationality,
+                state: user.state,
+                dateOfBirth: user.dateOfBirth,
+                accessToken: token,
+                roles: role,
+                message: 'admin registered successfully'
                 })
             })
         })
@@ -129,21 +130,25 @@ exports.signin = (req, res) => {
         });
         var authorities = [];
         user.getRoles().then(roles => {
-          roles.forEach(role => {
-            authorities.push("ROLE_" + role.name.toUpperCase());
+          roles.forEach(authorities => {
+            authorities.push("ROLE_" + authorities.name.toUpperCase());
           });
         });
         res.status(200).send({
           success: true,
           id: user.id,
-          username: user.username,
+          firstname: user.firstname,
+          middlename: user.middlename,
+          lastname: user.lastname,
           email: user.email,
-          phoneNo: user.phoneNo,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          nationality: user.nationality,
-          address: user.address,
+          userName: user.userName,
+          password: user.password,
+          phoneNumber: user.phoneNumber,
           image: user.image,
+          nationality: user.nationality,
+          state: user.state,
+          dateOfBirth: user.dateOfBirth,
+          accessToken: token,
           roles: authorities,
           accessToken: token
         });
@@ -158,7 +163,7 @@ exports.signin = (req, res) => {
 exports.UpdatePassword = (req, res) => {
     User.findOne({
       where: {
-        id: req.userId
+        id: req.body.userId
       }
     }).then(user => {
       if(!user){
@@ -184,7 +189,7 @@ exports.UpdatePassword = (req, res) => {
       },
       {
         where: {
-          id: parseInt(req.userId)
+          id: parseInt(req.userId) /*req.body.userId*/
         }
       })
     }).catch(err => {

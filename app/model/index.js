@@ -48,6 +48,7 @@ db.user.belongsToMany(db.role, {
     otherKey: 'roleId'
 });
 
+
 /*one to many relationship btw user and olevel
 i.e a user has many o_level*/
 

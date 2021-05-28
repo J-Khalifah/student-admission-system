@@ -6,12 +6,9 @@ const Institution = db.institution;
 
 exports.createInstitution = (req, res) => {
     Institution.create({
-        UniversityFirstChoice: req.body.UniversityFirstChoice,
-        UniversitySecondChoice: req.body.UniversitySecondChoice,
-        PolyFirstChoice: req.body.PolyFirstChoice,
-        PolySecondChoice: req.body.PolySecondChoice,
-        EduFirstChoice: req.body.EduFirstChoice,
-        EduSecondChoice: req.body.EduSecondChoice
+        name: req.body.name,
+        type: req.body.type,
+        location: req.body.location
     }).then(institution => {
         res.status(200).send({
             success: true,
@@ -23,6 +20,19 @@ exports.createInstitution = (req, res) => {
     });
 }
 
+//read institution by name
+
+exports.ReadInstitutionByName = (req, res) => {
+    Institution.findAndCountAll({
+        where: {
+            name: req.body.name
+        }
+    }).then(result => {
+        res.status(200).send({result: result, success: true, message: 'institution are listed below according to their names'})
+    }).catch(err => {
+        res.status(400).send({message:err.message, success: false})
+    })
+};
 //read institution
 
 exports.ReadInstitution = (req, res) => {
@@ -44,12 +54,9 @@ exports.ReadInstitution = (req, res) => {
 
 exports.updateInstitution = (req, res) => {
     Institution.update({
-        UniversityFirstChoice: req.body.UniversityFirstChoice,
-        UniversitySecondChoice: req.body.UniversitySecondChoice,
-        PolyFirstChoice: req.body.PolyFirstChoice,
-        PolySecondChoice: req.body.PolySecondChoice,
-        EduFirstChoice: req.body.EduFirstChoice,
-        EduSecondChoice: req.body.EduSecondChoice
+        name: req.body.name,
+        type: req.body.type,
+        location: req.body.location
     },
     {
         where: {
